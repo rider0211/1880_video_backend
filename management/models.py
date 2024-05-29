@@ -11,15 +11,20 @@ import io
 os.environ["TMPDIR"] = "../media/thumbnailtemp"
 
 class Camera(models.Model):
-    camera_name = models.CharField(max_length=255)
-    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
-    camera_seq_number = models.IntegerField()
-    camera_ip = models.CharField(max_length=255, unique = True)
+    camera_user_name = models.CharField(max_length=255)
+    camera_name = models.CharField(max_length=255, blank=True, default='')
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    camera_ip = models.CharField(max_length=255)
+    camera_port = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    camera_type = models.CharField(max_length=255)
+
     class Meta:
         db_table = 'camera_tbl'
+        constraints = [
+            models.UniqueConstraint(fields=['camera_ip', 'camera_port'], name='unique_camera_ip_port')
+        ]
         
 class CameraVoice(models.Model):
     customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
@@ -59,6 +64,35 @@ class Header(models.Model):
             
     class Meta:
         db_table = 'header_tbl'
+
+class Video(models.Model):
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    video_path = models.FileField(upload_to='videos/')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    thumbnail = models.ImageField(upload_to='videos/thumbnail/', null=True, blank=True)
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # Call the real save() method first.
+        if not self.thumbnail:  # Check if the thumbnail already exists.
+            self.generate_thumbnail()
+
+    def generate_thumbnail(self):
+        clip = VideoFileClip(self.video_path.path)
+        temp_thumb = io.BytesIO()
+        # Extract frame as an image
+        frame = clip.get_frame(t=1)
+        image = Image.fromarray(frame)
+        image.save(temp_thumb, format='JPEG')  # Explicitly specify the format
+        temp_thumb.seek(0)
+
+        self.thumbnail.save(f"{self.pk}_thumbnail.jpg", ContentFile(temp_thumb.read()), save=False)
+        temp_thumb.close()
+        clip.close()
+        self.save()
+
+    class Meta:
+        db_table = 'video_tbl'
         
 class Footer(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
