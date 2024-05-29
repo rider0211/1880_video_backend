@@ -1,15 +1,43 @@
 from rest_framework import serializers
-from .models import Header, Footer, CameraVoice, Camera
+from .models import Header, Footer, CameraVoice, Camera, Video
 
 class CameraSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Camera
-        fields = ['id', 'camera_name', 'camera_ip', 'camera_type', 'camera_seq_number', 'created_at', 'updated_at']
+        fields = ['id', 'camera_name', 'camera_user_name', 'camera_ip', 'camera_port', 'password', 'created_at', 'updated_at']
+    
+    def validate(self, attrs):
+        if self.instance:
+            return attrs
+
+        camera_ip = attrs.get('camera_ip')
+        camera_port = attrs.get('camera_port')
+        if Camera.objects.filter(camera_ip=camera_ip, camera_port=camera_port).exists():
+            raise serializers.ValidationError("A camera with this IP address and port already exists.")
+        return super().validate(attrs)
 
 class HeaderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Header
+        fields = ['id', 'video_path', 'created_at', 'updated_at', 'thumbnail']
+        read_only_fields = ['thumbnail']  # Make 'thumbnail' field read-only
+
+    def create(self, validated_data):
+        # Create a new Header instance using the validated data.
+        header_instance = Header.objects.create(**validated_data)
+        return header_instance
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        return instance
+
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
         fields = ['id', 'video_path', 'created_at', 'updated_at', 'thumbnail']
         read_only_fields = ['thumbnail']  # Make 'thumbnail' field read-only
 
