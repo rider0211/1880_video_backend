@@ -84,7 +84,7 @@ class GetClientByIdAPIView(APIView):
     
 class ClientDeleteAPIView(APIView):
     
-    permission_classes = [IsCustomer]
+    permission_classes = [IsAdminOrCustomer]
     
     def post(self, request, *args, **kwargs):
         client_id = request.data.get('client_id')
@@ -102,7 +102,7 @@ class ClientDeleteAPIView(APIView):
             return Response({"status": False, "data": {"msg": str(e)}}, status=status.HTTP_400_BAD_REQUEST)
 
 class ClientUpdateAPIView(APIView):
-    permission_classes = [IsCustomer]
+    permission_classes = [IsAdminOrCustomer]
 
     def post(self, request, *args, **kwargs):
         client_id = request.data['client_id']
