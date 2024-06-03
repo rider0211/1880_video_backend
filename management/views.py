@@ -232,9 +232,7 @@ class CameraVoiceAPIView(APIView):
                         },
                         "camera_data": {
                             "id": cameradata.pk,
-                            "camera_seq_number": cameradata.camera_seq_number,
                             "camera_name" : cameradata.camera_name,
-                            "camera_type" : cameradata.camera_type,
                         },
                         "wait_for_sec": serializer.data.get('wait_for_sec'),
                         "enter_or_exit_code": serializer.data.get('enter_or_exit_code'),
@@ -272,9 +270,7 @@ class CameraVoiceAPIView(APIView):
                             },
                             "camera_data": {
                                 "id": cameradata.pk,
-                                "camera_seq_number": cameradata.camera_seq_number,
                                 "camera_name" : cameradata.camera_name,
-                                "camera_type" : cameradata.camera_type,
                             },
                             "wait_for_sec": serializer.data.get('wait_for_sec'),
                             "enter_or_exit_code": serializer.data.get('enter_or_exit_code'),
@@ -316,9 +312,7 @@ class CameraVoiceByCameraIdAPIView(APIView):
                             },
                             "camera_data": {
                                 "id": cameradata.pk,
-                                "camera_seq_number": cameradata.camera_seq_number,
                                 "camera_name" : cameradata.camera_name,
-                                "camera_type" : cameradata.camera_type,
                             },
                             "wait_for_sec": item['wait_for_sec'],
                             "enter_or_exit_code": item['enter_or_exit_code'],
@@ -356,9 +350,7 @@ class GetAllCameraVoiceAPIView(APIView):
                         },
                         "camera_data": {
                             "id": cameradata.pk,
-                            "camera_seq_number": cameradata.camera_seq_number,
                             "camera_name" : cameradata.camera_name,
-                            "camera_type" : cameradata.camera_type,
                         },
                         "wait_for_sec": item['wait_for_sec'],
                         "enter_or_exit_code": item['enter_or_exit_code'],
@@ -428,9 +420,7 @@ class UpdateCameraVoiceAPIView(APIView):
                             },
                             "camera_data": {
                                 "id": camera.pk,
-                                "camera_seq_number": camera.camera_seq_number,
                                 "camera_name" : camera.camera_name,
-                                "camera_type" : camera.camera_type,
                             },
                             "wait_for_sec": cameravoice_serializer.data.get('wait_for_sec'),
                             "enter_or_exit_code": cameravoice_serializer.data.get('enter_or_exit_code'),

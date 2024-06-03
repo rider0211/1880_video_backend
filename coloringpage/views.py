@@ -35,9 +35,7 @@ class ColoringPageListCreateAPIView(APIView):
                 },
                 "camera": {
                     "id": camera.id,
-                    "camera_seq_number": camera.camera_seq_number,
                     "camera_name": camera.camera_name,
-                    "camera_type": camera.camera_type
                 },
                 "coloringpage": serializer.data[i]['coloringpage'],
                 "wait_for_sec": serializer.data[i]['wait_for_sec'],
@@ -71,9 +69,7 @@ class ColoringPageListCreateAPIView(APIView):
                 },
                 "camera": {
                     "id": camera.id,
-                    "camera_seq_number": camera.camera_seq_number,
                     "camera_name": camera.camera_name,
-                    "camera_type": camera.camera_type
                 },
                 "coloringpage": serializer.data['coloringpage'],
                 "wait_for_sec": serializer.data['wait_for_sec'],
@@ -110,9 +106,7 @@ class ColoringPageDetailAPIView(APIView):
             },
             "camera": {
                 "id": camera.id,
-                "camera_seq_number": camera.camera_seq_number,
                 "camera_name": camera.camera_name,
-                "camera_type": camera.camera_type
             },
             "coloringpage": serializer.data['coloringpage'],
             "wait_for_sec": serializer.data['wait_for_sec'],
@@ -146,9 +140,7 @@ class ColoringPageDetailAPIView(APIView):
                     },
                     "camera": {
                         "id": camera.id,
-                        "camera_seq_number": camera.camera_seq_number,
                         "camera_name": camera.camera_name,
-                        "camera_type": camera.camera_type
                     },
                     "coloringpage": serializer.data['coloringpage'],
                     "wait_for_sec": serializer.data['wait_for_sec'],
